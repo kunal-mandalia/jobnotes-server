@@ -1,0 +1,25 @@
+# Types, Interfaces, enums
+
+type USER {
+  email: String!
+  password_hash: String!
+}
+
+enum ACCOUNT_STATUS {
+  UNREGISTERED
+  AWAITING_CONFIRMATION
+  UNREGISTERED
+  CLOSED
+  DISABLED
+}
+
+
+
+#
+# Queries
+#
+
+#
+# Mutations
+#
+
