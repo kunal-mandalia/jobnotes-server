@@ -13,6 +13,7 @@ type Profile {
   email: String!
   status: AccountStatus
   name: String
+  role: Role
 }
 
 type Credential {
@@ -56,7 +57,7 @@ type Note {
   id: ID!
   comments: String! // to be read in markdown
 }
-
+`
 #
 # Queries
 #
@@ -70,8 +71,10 @@ type Query {
 # Mutations
 #
 type Mutation {
-  createOpportunity(opportunity: Opportunity): Opportunity
-  updateOpportunity(opportunity: Opportunity): Opportunity
+  register(credential: Credential!): String! // email address
+  confirmAccount(confirmationCode: String!):
+  createOpportunity(opportunity: Opportunity!): Opportunity!
+  updateOpportunity(opportunity: Opportunity!): Opportunity!
   deleteOpportunity(id: Int!): Int!
 }
 
