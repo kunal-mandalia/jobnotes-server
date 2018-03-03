@@ -1,11 +1,30 @@
 # Types, Interfaces, enums
 
-type USER {
+type User {
+  id: ID!
   email: String!
   password_hash: String!
+  status: AccountStatus
+  name: String
+  role: Role
 }
 
-enum ACCOUNT_STATUS {
+type Profile {
+  email: String!
+  status: AccountStatus
+  name: String
+}
+
+type Credential {
+  username: String!
+  password: String!
+}
+
+type Token {
+  jwt: String!
+}
+
+enum AccountStatus {
   UNREGISTERED
   AWAITING_CONFIRMATION
   UNREGISTERED
@@ -13,13 +32,52 @@ enum ACCOUNT_STATUS {
   DISABLED
 }
 
+enum Role {
+  ADMIN
+  CONSUMER
+}
 
+type Opportunity {
+  id: ID!
+  company: String!
+  address: String
+  money: Int
+  recruiter: Recruiter
+  note: Note // @relationship
+}
+
+type Recruiter {
+  id: ID!
+  name: String
+  telephone: String
+}
+
+type Note {
+  id: ID!
+  comments: String! // to be read in markdown
+}
 
 #
 # Queries
 #
+type Query {
+  login(credential: Credential): Token
+  getMyProfile: Profile
+  getOpportunities: [Opportunity]
+}
 
 #
 # Mutations
 #
+type Mutation {
+  createOpportunity(opportunity: Opportunity): Opportunity
+  updateOpportunity(opportunity: Opportunity): Opportunity
+  deleteOpportunity(id: Int!): Int!
+}
 
+#
+# Subscriptions
+#
+type Subscription {
+
+}
