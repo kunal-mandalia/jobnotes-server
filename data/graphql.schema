@@ -26,9 +26,8 @@ type Token {
 }
 
 enum AccountStatus {
-  UNREGISTERED
   AWAITING_CONFIRMATION
-  UNREGISTERED
+  REGISTERED
   CLOSED
   DISABLED
 }
