@@ -4,8 +4,9 @@ const Resolver = databaseLayer => {
   // register: ({credential: { email, password }},)
   // todo: clarify gql function signature
   return {
-    register: (credentail) => {
-      return databaseLayer.register(credentail)
+    register: async ({credentail}) => {
+      const result = await databaseLayer.register(credentail)
+      return result
     }
   }
 }

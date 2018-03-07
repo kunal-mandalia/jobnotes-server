@@ -3,16 +3,18 @@ const databaseLayer = (ORM) => {
     /**
      * 
      * @param {Object} credential: {email, password}
-     * @return {Promise}
+     * @return {String} email
      */
-    register: function register(credential) {
-      return new Promise((resolve, reject) => {
+    register: async function register(credential) {
+      try {
         const { email, password } = credential
         if (typeof email !== 'string' || typeof password !== 'string') {
-          reject(new Error('error: bad credentials'))
+          throw 'Arguments must be type string'
         }
-        resolve(email)
-      })
+        return email
+      } catch (e) {
+        throw new Error(e)
+      }
     }
   }
 }
