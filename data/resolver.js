@@ -11,7 +11,9 @@ const Resolver = databaseLayer => {
   }
 }
 
+const resolver = Resolver(db)
+
 module.exports = {
   Resolver,
-  resolver: Resolver(db)
+  resolver
 }
