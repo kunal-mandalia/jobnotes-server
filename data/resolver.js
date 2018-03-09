@@ -7,6 +7,10 @@ const Resolver = databaseLayer => {
     register: async ({credentail}) => {
       const result = await databaseLayer.register(credentail)
       return result
+    },
+    confirmAccount: async ({confirmationCode}) => {
+      const result = await databaseLayer.confirmAccount(confirmationCode)
+      return result
     }
   }
 }

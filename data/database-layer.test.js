@@ -16,4 +16,19 @@ describe('database-layer', () => {
       expect(result).toEqual(credential.email)
     })
   })
+
+  describe('confirmAccount()', () => {
+    it('should reject given invalid confirmation code', async () => {
+      const confirmationCode = null
+      await expect(dbLayer.confirmAccount(confirmationCode)).rejects
+    })
+
+    it('should update user account status to CONFIRMED and return TRUE', async () => {
+      const confirmationCode = 'VALID_TEST_CONFIRMATION_CODE'
+      
+      // todo: verify ORM called with update request
+      const result = await dbLayer.confirmAccount(confirmationCode)
+      expect(result).toEqual(true)
+    })
+  })
 })

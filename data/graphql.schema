@@ -1,4 +1,6 @@
+#
 # Types, Interfaces, enums
+#
 
 type User {
   id: ID!

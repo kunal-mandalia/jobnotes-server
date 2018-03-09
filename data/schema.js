@@ -73,7 +73,7 @@ const Schema = (buildSchemaGQL = buildSchema) => buildSchemaGQL(`
   #
   type Mutation {
     register(credential: Credential!): String! // email address
-    confirmAccount(confirmationCode: String!):
+    confirmAccount(confirmationCode: String!): Bool
     createOpportunity(opportunity: Opportunity!): Opportunity!
     updateOpportunity(opportunity: Opportunity!): Opportunity!
     deleteOpportunity(id: Int!): Int!
