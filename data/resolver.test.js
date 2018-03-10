@@ -6,7 +6,6 @@ const mockDB = handlers => ({
   ...handlers
 })
 
-
 describe('resolver', () => {
   describe('register()', () => {
     it('should call db layer register with Credential arg', async () => {
@@ -15,8 +14,7 @@ describe('resolver', () => {
 
       const credential = { email: 'kunal.v.mandalia@gmail.com', password: 'demo' }
       const result = await resolver.register({credential})
-      // toBeCalledWith not capturing args, scope issue?
-      expect(db.register).toBeCalled()
+      expect(db.register).toBeCalledWith(credential)
     })
   })
   describe('confirmAccount()', () => {
@@ -25,8 +23,8 @@ describe('resolver', () => {
       const resolver = Resolver(db)
 
       const confirmationCode = 'TEST_CONFIRMATION_CODE'
-      const result = await resolver.confirmAccount(confirmationCode)
-      expect(db.confirmAccount).toBeCalled()
+      const result = await resolver.confirmAccount({confirmationCode})
+      expect(db.confirmAccount).toBeCalledWith(confirmationCode)
     })
   })
 })

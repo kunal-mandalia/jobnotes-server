@@ -1,4 +1,4 @@
-const databaseLayer = (ORM) => {
+const DatabaseLayer = (ORM) => {
   return {
     /**
      * 
@@ -36,6 +36,8 @@ const databaseLayer = (ORM) => {
   }
 }
 
+const databaseLayer = DatabaseLayer()
 module.exports = {
-  databaseLayer,
+  DatabaseLayer,
+  databaseLayer
 }

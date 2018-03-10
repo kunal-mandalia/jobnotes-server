@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 const graphqlHTTP = require('express-graphql')
 const { resolver } = require('./data/resolver')
 const { schema } = require('./data/schema')
-
+const { hostname } = require("os");
 
 const PORT = 3000 // TODO: use dotenv
 const app = express()
@@ -19,13 +19,13 @@ app.use('/api', function (req, res, next) {
   next()
 })
 
-app.use('/api/graphql', graphqlHTTP(req => {
+app.use('/api/graphiql', graphqlHTTP(req => {
   return {
-  schema: schema,
-  rootValue: resolver,
-  graphiql: true,
-  context: req.context || null, // Set context in resolver e.g. after logging in
+    schema,
+    rootValue: resolver,
+    graphiql: true,
+    context: req.context || null, // Set context in resolver e.g. after logging in
 }}))
 
 app.listen(PORT)
-console.log(`Running protected GraphQL API server at <domain>:${PORT}/private/graphql`)
+console.log(`Running GraphQL API server at ${hostname}:${PORT}/api/graphiql`)

@@ -1,7 +1,7 @@
-const { databaseLayer } = require('./database-layer')
+const { DatabaseLayer } = require('./database-layer')
 
 const mockORM = {}
-const dbLayer = databaseLayer(mockORM)
+const dbLayer = DatabaseLayer(mockORM)
 
 describe('database-layer', () => {
   describe('register()', () => {

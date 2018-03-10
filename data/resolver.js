@@ -1,11 +1,11 @@
-const db = require('./database-layer')
+const db = require('./database-layer').databaseLayer
 
 const Resolver = databaseLayer => {
   // register: ({credential: { email, password }},)
   // todo: clarify gql function signature
   return {
-    register: async ({credentail}) => {
-      const result = await databaseLayer.register(credentail)
+    register: async ({credential}) => {
+      const result = await databaseLayer.register(credential)
       return result
     },
     confirmAccount: async ({confirmationCode}) => {
