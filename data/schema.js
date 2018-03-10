@@ -21,8 +21,8 @@ const Schema = (buildSchemaGQL = buildSchema) => buildSchemaGQL(`
     role: Role
   }
 
-  type Credential {
-    username: String!
+  input CredentialInput {
+    email: String!
     password: String!
   }
 
@@ -48,7 +48,16 @@ const Schema = (buildSchemaGQL = buildSchema) => buildSchemaGQL(`
     address: String
     money: Int
     recruiter: Recruiter
-    note: Note // @relationship
+    note: Note
+  }
+
+  input OpportunityInput {
+    id: ID!
+    company: String
+    address: String
+    money: Int
+    recruiter: RecruiterInput
+    note: NoteInput
   }
 
   type Recruiter {
@@ -57,13 +66,24 @@ const Schema = (buildSchemaGQL = buildSchema) => buildSchemaGQL(`
     telephone: String
   }
 
+  input RecruiterInput {
+    id: ID!
+    name: String
+    telephone: String
+  }
+
   type Note {
     id: ID!
-    comments: String! // to be read in markdown
+    comments: String!
+  }
+
+  input NoteInput {
+    id: ID!
+    comments: String!
   }
 
   type Query {
-    login(credential: Credential): Token
+    login(credential: CredentialInput): Token
     getMyProfile: Profile
     getOpportunities: [Opportunity]
   }
@@ -72,19 +92,16 @@ const Schema = (buildSchemaGQL = buildSchema) => buildSchemaGQL(`
   # Mutations
   #
   type Mutation {
-    register(credential: Credential!): String! // email address
-    confirmAccount(confirmationCode: String!): Bool
-    createOpportunity(opportunity: Opportunity!): Opportunity!
-    updateOpportunity(opportunity: Opportunity!): Opportunity!
+    register(credential: CredentialInput!): String!
+    confirmAccount(confirmationCode: String!): Boolean
+    createOpportunity(opportunity: OpportunityInput!): Opportunity!
+    updateOpportunity(opportunity: OpportunityInput!): Opportunity!
     deleteOpportunity(id: Int!): Int!
   }
 
   #
   # Subscriptions
   #
-  type Subscription {
-
-  }
 `)
 
 const schema = Schema()
