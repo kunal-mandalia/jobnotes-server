@@ -5,9 +5,18 @@
   "author": "Kunal Mandalia <kunal.v.mandalia@gmail.com> (http://kunalmandalia.com/)",
   "license": "MIT",
   "devDependencies": {
-    "jest": "22.4.2"
+    "jest": "22.4.2",
+    "nodemon": "1.17.1"
   },
   "scripts": {
-    "test": "jest --watch"
+    "start": "node index.js",
+    "test": "jest --watch",
+    "watch": "nodemon index.js"
+  },
+  "dependencies": {
+    "body-parser": "1.18.2",
+    "express": "4.16.2",
+    "express-graphql": "0.6.12",
+    "graphql": "0.13.1"
   }
 }
