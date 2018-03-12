@@ -1,7 +1,13 @@
-const { databaseLayer } = require('./database-layer')
-const ORM = {} // require('postgres'), setup
-const databaseConnection = databaseLayer(ORM)
+const { Pool } = require('pg')
+const config = {
+  user: process.env.PGUSER,
+  host: process.env.PGHOSTADDR,
+  database: process.env.PGDATABASE,
+  password: process.env.PGPASSWORD,
+  port: process.env.PGPORT,
+}
+const pool = new Pool(config)
 
 module.exports = {
-  databaseConnection
+  db: pool,
 }
