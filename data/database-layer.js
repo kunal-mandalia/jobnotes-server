@@ -16,7 +16,7 @@ const DatabaseLayer = (db = database) => {
         const res = await db.query('SELECT NOW()')
         // todo: create user if doesn't exist using ORM
         // return email
-        return JSON.stringify(res)
+        return res
       } catch (e) {
         throw new Error(e)
       }
@@ -31,6 +31,7 @@ const DatabaseLayer = (db = database) => {
         if (typeof confirmationCode !== 'string') {
           throw 'Argument must be type string'
         }
+
         // todo: find user based ons
         return true
       } catch (e) {

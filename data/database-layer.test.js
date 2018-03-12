@@ -1,7 +1,11 @@
 const { DatabaseLayer } = require('./database-layer')
 
-const mockORM = {}
-const dbLayer = DatabaseLayer(mockORM)
+let db = { query: jest.fn() }
+const dbLayer = DatabaseLayer(db)
+
+afterEach(() => {
+  db.query.mockClear()
+})
 
 describe('database-layer', () => {
   describe('register()', () => {
@@ -12,6 +16,7 @@ describe('database-layer', () => {
 
     it('should create a new account awaiting email confirmation', async () => {
       const credential = { email: "kunal.v.mandalia@gmail.com", password: 'unit-test-password' }
+      db.query.mockReturnValueOnce(credential.email)
       const result = await dbLayer.register(credential)
       expect(result).toEqual(credential.email)
     })
