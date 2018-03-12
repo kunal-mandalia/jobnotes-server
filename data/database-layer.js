@@ -1,4 +1,6 @@
-const DatabaseLayer = (ORM) => {
+const database = require('./connection').db
+
+const DatabaseLayer = (db = database) => {
   return {
     /**
      * 
@@ -11,8 +13,10 @@ const DatabaseLayer = (ORM) => {
         if (typeof email !== 'string' || typeof password !== 'string') {
           throw 'Arguments must be type string'
         }
+        const res = await db.query('SELECT NOW()')
         // todo: create user if doesn't exist using ORM
-        return email
+        // return email
+        return JSON.stringify(res)
       } catch (e) {
         throw new Error(e)
       }
