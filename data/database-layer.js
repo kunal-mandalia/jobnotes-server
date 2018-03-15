@@ -1,3 +1,4 @@
+const queries = require('./queries/queries')
 const database = require('./connection').db
 
 const DatabaseLayer = (db = database) => {
@@ -10,13 +11,8 @@ const DatabaseLayer = (db = database) => {
     register: async function register(credential) {
       try {
         const { email, password } = credential
-        if (typeof email !== 'string' || typeof password !== 'string') {
-          throw 'Arguments must be type string'
-        }
-        const res = await db.query('SELECT NOW()')
-        // todo: create user if doesn't exist using ORM
-        // return email
-        return res
+        const res = await db.query(queries.register({ email, password }))
+        return email
       } catch (e) {
         throw new Error(e)
       }
