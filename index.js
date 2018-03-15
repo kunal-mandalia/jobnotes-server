@@ -3,7 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const graphqlHTTP = require('express-graphql')
 const { resolver } = require('./data/resolver')
-const { schema } = require('./data/schema')
+const { schema } = require('./data/graphql-schema')
 const { hostname } = require("os");
 
 const PORT = 3000 // TODO: use dotenv
