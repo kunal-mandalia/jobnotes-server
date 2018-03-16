@@ -1,7 +1,6 @@
-const queries = require('./queries/queries')
-const database = require('./connection').db
+const ORM = require('./model')
 
-const DatabaseLayer = (db = database) => {
+const DatabaseLayer = (db = ORM) => {
   return {
     /**
      * 
@@ -10,9 +9,8 @@ const DatabaseLayer = (db = database) => {
      */
     register: async function register(credential) {
       try {
-        const { email, password } = credential
-        const res = await db.query(queries.register({ email, password }))
-        return email
+        const res = await db.User.create(credential)
+        return res.dataValues.email
       } catch (e) {
         throw new Error(e)
       }
