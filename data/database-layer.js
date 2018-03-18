@@ -5,12 +5,38 @@ const {
   generateRandomAlphanumericString
 } = require('../util/helper')
 const {
-  AWAITING_CONFIRMATION
+  AWAITING_CONFIRMATION,
+  USER
 } = require('./constants')
 
 
 const DatabaseLayer = (db = ORM) => {
   return {
+    /**
+     * Updates user's account status to confirmed
+     * @param {String} confirmationCode
+     * @return {Bool} successfully confirmed account
+     */
+    confirmAccount: async function confirmAccount(confirmationCode) {
+      try {
+        if (typeof confirmationCode !== 'string') {
+          throw 'Argument must be type string'
+        }
+
+        // todo: find user based ons
+        return true
+      } catch (e) {
+        throw new Error(e)
+      }
+    },
+    getUserById: async function getUserById(user_id) {
+      try {
+        const result = db.User.findById(user_id)
+        return result
+      } catch (e) {
+        throw new Error(e)
+      }
+    },
     /**
      * 
      * @param {Object} credential: {email, password}
@@ -35,26 +61,10 @@ const DatabaseLayer = (db = ORM) => {
           email,
           password: hash,
           confirmation_code: confirmationCode,
-          status: AWAITING_CONFIRMATION })
-
+          role: USER,
+          status: AWAITING_CONFIRMATION
+        })
         return res.dataValues.email
-      } catch (e) {
-        throw new Error(e)
-      }
-    },
-    /**
-     * Updates user's account status to confirmed
-     * @param {String} confirmationCode
-     * @return {Bool} successfully confirmed account
-     */
-    confirmAccount: async function confirmAccount(confirmationCode) {
-      try {
-        if (typeof confirmationCode !== 'string') {
-          throw 'Argument must be type string'
-        }
-
-        // todo: find user based ons
-        return true
       } catch (e) {
         throw new Error(e)
       }
