@@ -8,7 +8,10 @@ const isValidEmail = email => {
   return re.test(email)
 }
 
+const generateRandomAlphanumericString = (length = 10) => Math.random().toString(36).slice(length * -1);
+
 module.exports = {
   getNowISO,
-  isValidEmail
+  isValidEmail,
+  generateRandomAlphanumericString
 }
