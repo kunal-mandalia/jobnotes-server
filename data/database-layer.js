@@ -1,7 +1,15 @@
-const queries = require('./queries/queries')
-const database = require('./connection').db
+const bcrypt = require('bcrypt')
+const ORM = require('./model')
+const {
+  isValidEmail,
+  generateRandomAlphanumericString
+} = require('../util/helper')
+const {
+  AWAITING_CONFIRMATION
+} = require('./constants')
 
-const DatabaseLayer = (db = database) => {
+
+const DatabaseLayer = (db = ORM) => {
   return {
     /**
      * 
@@ -10,9 +18,26 @@ const DatabaseLayer = (db = database) => {
      */
     register: async function register(credential) {
       try {
+        if (!credential || !credential.email || !credential.password) {
+          console.log('missing...', credential)
+          throw 'Missing args'
+        }
+        if (typeof credential.email !== 'string' || typeof credential.password !== 'string') {
+          throw 'Invalid arg type(s)'
+        }
+        if (!isValidEmail(credential.email)) {
+          throw 'Invalid email'
+        }
         const { email, password } = credential
-        const res = await db.query(queries.register({ email, password }))
-        return email
+        const confirmationCode = generateRandomAlphanumericString()
+        const hash = await bcrypt.hash(password, 10)
+        const res = await db.User.create({
+          email,
+          password: hash,
+          confirmation_code: confirmationCode,
+          status: AWAITING_CONFIRMATION })
+
+        return res.dataValues.email
       } catch (e) {
         throw new Error(e)
       }
