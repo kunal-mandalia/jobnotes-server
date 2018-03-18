@@ -17,6 +17,7 @@ describe('resolver', () => {
       expect(db.register).toBeCalledWith(credential)
     })
   })
+  
   describe('confirmAccount()', () => {
     it('should call db layer register with confirmationCode arg', async () => {
       const db = mockDB()
