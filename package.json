@@ -12,7 +12,8 @@
   "scripts": {
     "start": "node index.js",
     "test": "jest --watch",
-    "watch": "nodemon index.js"
+    "watch": "nodemon index.js",
+    "ci-test": "jest"
   },
   "dependencies": {
     "bcrypt": "1.0.3",
