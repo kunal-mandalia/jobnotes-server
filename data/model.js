@@ -8,6 +8,10 @@ const User = sequelize.define('user', {
   password: Sequelize.STRING,
   last_login: Sequelize.DATE,
   confirmation_code: Sequelize.STRING,
+  role: Sequelize.ENUM(
+    constant.ADMIN,
+    constant.USER
+  ),
   status: Sequelize.ENUM(
     constant.AWAITING_CONFIRMATION,
     constant.CLOSED,
