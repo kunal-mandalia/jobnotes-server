@@ -9,7 +9,6 @@ const Resolver = databaseLayer => {
       return result
     },
     getMyProfile: async (_, context) => {
-      console.log('context.headers.authorization', context.headers.authorization)
       const user_id = context.headers.authorization
       if (user_id) {
         const result = await db.getUserById(31)
