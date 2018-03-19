@@ -1,3 +1,4 @@
+require('dotenv').config('.env.test')
 const { authenticate } = require('./authentication')
 const jwt = require('jsonwebtoken')
 
@@ -48,6 +49,8 @@ describe(`middleware`, () => {
         const token = await jwt.sign(user, (process.env.JWT_SECRET_KEY || 'secret'), { expiresIn: '1m' })
         req.headers.authorization = `Bearer ${token}`
         authenticate(req, res, next)
+        expect(res.status).not.toBeCalled()
+        
         for (key in user) {
           expect(req.user[key]).toEqual(user[key])
         }
