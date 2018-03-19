@@ -45,7 +45,7 @@ describe(`middleware`, () => {
           name: 'Kunal Mandalia',
           email: 'kunal.v.mandalia@gmail.com'
         }
-        const token = await jwt.sign(user, process.env.JWT_SECRET_KEY, { expiresIn: '1m' })
+        const token = await jwt.sign(user, (process.env.JWT_SECRET_KEY || 'secret'), { expiresIn: '1m' })
         req.headers.authorization = `Bearer ${token}`
         authenticate(req, res, next)
         for (key in user) {
