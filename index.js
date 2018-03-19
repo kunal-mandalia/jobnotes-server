@@ -2,11 +2,12 @@ require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const graphqlHTTP = require('express-graphql')
+const { hostname } = require('os');
 const { resolver } = require('./data/resolver')
 const { schema } = require('./data/graphql-schema')
-const { hostname } = require("os");
+const { authenticate } = require('./middleware/authentication')
 
-const PORT = 3000 // TODO: use dotenv
+const PORT = process.env.PORT
 const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
@@ -20,12 +21,12 @@ app.use('/api', function (req, res, next) {
   next()
 })
 
+app.use('/api/graphiql', authenticate)
 app.use('/api/graphiql', graphqlHTTP(req => {
   return {
     schema,
     rootValue: resolver,
     graphiql: true,
-    context: req.context || null, // Set context in resolver e.g. after logging in
 }}))
 
 app.listen(PORT)
