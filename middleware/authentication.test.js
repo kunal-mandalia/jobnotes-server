@@ -1,4 +1,3 @@
-require('dotenv').config('.env.test')
 const { authenticate } = require('./authentication')
 const jwt = require('jsonwebtoken')
 
@@ -46,8 +45,6 @@ describe(`middleware`, () => {
           email: 'kunal.v.mandalia@gmail.com'
         }
 
-        console.log('process.env.JWT_SECRET_KEY 1', process.env.JWT_SECRET_KEY)
-        
         const token = await jwt.sign(user, (process.env.JWT_SECRET_KEY || 'secret'), { expiresIn: '1m' })
         req.headers.authorization = `Bearer ${token}`
         authenticate(req, res, next)

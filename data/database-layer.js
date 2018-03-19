@@ -45,7 +45,6 @@ const DatabaseLayer = (db = ORM) => {
     register: async function register(credential) {
       try {
         if (!credential || !credential.email || !credential.password) {
-          console.log('missing...', credential)
           throw 'Missing args'
         }
         if (typeof credential.email !== 'string' || typeof credential.password !== 'string') {
