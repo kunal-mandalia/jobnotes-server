@@ -1,8 +1,12 @@
 const db = require('./database-layer').databaseLayer
 
 const Resolver = databaseLayer => {
-  // register: ({credential: { email, password }},)
-  // todo: clarify gql function signature
+  /**
+   * Resolver function signature
+   * Since resolver is mounted on root the signature
+   * will omit parent
+   * (args, context, info)
+   */
   return {
     confirmAccount: async ({confirmationCode}) => {
       const result = await databaseLayer.confirmAccount(confirmationCode)

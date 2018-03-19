@@ -23,7 +23,10 @@ const DatabaseLayer = (db = ORM) => {
           throw 'Argument must be type string'
         }
 
-        // todo: find user based ons
+        // todo: find user based ons: sequelize findOne query structure
+        // db.User.findOne({
+
+        // })
         return true
       } catch (e) {
         throw new Error(e)
