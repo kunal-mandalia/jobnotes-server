@@ -2,7 +2,8 @@ const bcrypt = require('bcrypt')
 const ORM = require('./model')
 const {
   isValidEmail,
-  generateRandomAlphanumericString
+  generateRandomAlphanumericString,
+  validateCredential
 } = require('../util/helper')
 const {
   AWAITING_CONFIRMATION,
@@ -44,6 +45,14 @@ const DatabaseLayer = (db = ORM) => {
         throw new Error(e)
       }
     },
+    login: async function login(credential) {
+      try {
+        validateCredential(credential)
+        
+      } catch (e) {
+        throw new Error(e)
+      }
+    },
     /**
      * 
      * @param {Object} credential: {email, password}
@@ -51,15 +60,8 @@ const DatabaseLayer = (db = ORM) => {
      */
     register: async function register(credential) {
       try {
-        if (!credential || !credential.email || !credential.password) {
-          throw 'Missing args'
-        }
-        if (typeof credential.email !== 'string' || typeof credential.password !== 'string') {
-          throw 'Invalid arg type(s)'
-        }
-        if (!isValidEmail(credential.email)) {
-          throw 'Invalid email'
-        }
+        validateCredential(credential)
+
         const { email, password } = credential
         const confirmationCode = generateRandomAlphanumericString()
         const hash = await bcrypt.hash(password, 10)
