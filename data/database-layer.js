@@ -6,6 +6,7 @@ const {
 } = require('../util/helper')
 const {
   AWAITING_CONFIRMATION,
+  REGISTERED,
   USER
 } = require('./constants')
 
@@ -19,15 +20,18 @@ const DatabaseLayer = (db = ORM) => {
      */
     confirmAccount: async function confirmAccount(confirmationCode) {
       try {
-        if (typeof confirmationCode !== 'string') {
+        if (!confirmationCode || typeof confirmationCode !== 'string') {
           throw 'Argument must be type string'
         }
 
-        // todo: find user based ons: sequelize findOne query structure
-        // db.User.findOne({
-
-        // })
-        return true
+        const result = await db.User.update(
+          {
+            status: REGISTERED,
+            confirmation_code: null
+          },
+          { where: { confirmation_code: confirmationCode }}
+        )
+        return result[0]
       } catch (e) {
         throw new Error(e)
       }
