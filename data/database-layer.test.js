@@ -26,7 +26,7 @@ describe('database-layer', () => {
 
     it('should reject given invalid confirmation code', async () => {
       const confirmationCode = null
-      expect(async () => { await dbLayer.confirmAccount(confirmationCode) }).rejects
+      await expect(dbLayer.confirmAccount(confirmationCode)).rejects.toBeInstanceOf(Error)
     })
 
     it('should update user account status to CONFIRMED and return TRUE', async () => {
@@ -70,23 +70,29 @@ describe('database-layer', () => {
     })
   })
 
+  describe('login()', () => {
+    it('should throw given invalid credentials', async () => {
+      const badCredential = { email: 'kunal@ltd.co', password: null }
+      await expect(dbLayer.login(badCredential)).rejects.toBeInstanceOf(Error)
+    })
+  })
+
   describe('register()', () => {
-    it('should not call user create given invalid credential', () => {
+    it('should not call user create given invalid credential', async () => {
       const credential = { email: null, password: '' }
-      expect(async () => { await dbLayer.register(credential) }).rejects
+      await expect(dbLayer.register(credential)).rejects.toBeInstanceOf(Error)
       expect(db.User.create).not.toBeCalled()
     })
     
-    it('should reject given invalid credential', () => {
+    it('should reject given invalid credential', async () => {
       const credential = { email: null, password: '' }
-      expect(async () => { await dbLayer.register(credential) }).rejects
+      await expect(dbLayer.register(credential)).rejects.toBeInstanceOf(Error)
     })
 
     it('should create a new account awaiting email confirmation', async () => {
       const credential = { email: "kunal.v.mandalia@gmail.com", password: 'unit-test-password' }
       db.User.create.mockReturnValueOnce({ dataValues: { email: credential.email }})
-      const result = await dbLayer.register(credential)
-      expect(result).toEqual(credential.email)
+      await expect(dbLayer.register(credential)).resolves.toEqual(credential.email)
     })
   })
 })
