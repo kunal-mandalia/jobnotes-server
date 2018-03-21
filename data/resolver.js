@@ -20,6 +20,10 @@ const Resolver = databaseLayer => {
       }
       throw new Error('You need to login first')
     },
+    login: async ({credential}) => {
+      const result = await databaseLayer.login(credential)
+      return result
+    },
     register: async ({credential}) => {
       const result = await databaseLayer.register(credential)
       return result
