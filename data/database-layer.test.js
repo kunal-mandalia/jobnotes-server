@@ -3,7 +3,8 @@ const { DatabaseLayer } = require('./database-layer')
 let db = {
   User: {
     create: jest.fn(),
-    findById: jest.fn()
+    findById: jest.fn(),
+    update: jest.fn()
   }
 }
 const dbLayer = DatabaseLayer(db)
@@ -15,17 +16,32 @@ afterEach(() => {
 
 describe('database-layer', () => {
   describe('confirmAccount()', () => {
+    const VALID_TEST_CONFIRMATION_CODE = 'VALID_TEST_CONFIRMATION_CODE'
+    const INVALID_TEST_CONFIRMATION_CODE = 'INVALID_TEST_CONFIRMATION_CODE'
+
+    db.User.update.mockImplementation((values, options) => {
+      if (options.where.confirmation_code === VALID_TEST_CONFIRMATION_CODE) return [1]
+      return [0]
+    })
+
     it('should reject given invalid confirmation code', async () => {
       const confirmationCode = null
-      expect(async () => { await dbLayer.confirmAccount(confirmationCode) }).rejects
+      await expect(dbLayer.confirmAccount(confirmationCode)).rejects.toBeInstanceOf(Error)
     })
 
     it('should update user account status to CONFIRMED and return TRUE', async () => {
-      const confirmationCode = 'VALID_TEST_CONFIRMATION_CODE'
-      
-      // todo: verify ORM called with update request
-      const result = await dbLayer.confirmAccount(confirmationCode)
-      expect(result).toEqual(true)
+      const result = await dbLayer.confirmAccount(VALID_TEST_CONFIRMATION_CODE)
+      expect(result).toEqual(1)
+    })
+
+    it('should update user account status to CONFIRMED and return 1', async () => {
+      const result = await dbLayer.confirmAccount(VALID_TEST_CONFIRMATION_CODE)
+      expect(result).toEqual(1)
+    })
+
+    it('should not update user status if confirmation code not found and return 0', async () => {
+      const result = await dbLayer.confirmAccount(INVALID_TEST_CONFIRMATION_CODE)
+      expect(result).toEqual(0)
     })
   })
 
@@ -54,23 +70,29 @@ describe('database-layer', () => {
     })
   })
 
+  describe('login()', () => {
+    it('should throw given invalid credentials', async () => {
+      const badCredential = { email: 'kunal@ltd.co', password: null }
+      await expect(dbLayer.login(badCredential)).rejects.toBeInstanceOf(Error)
+    })
+  })
+
   describe('register()', () => {
-    it('should not call user create given invalid credential', () => {
+    it('should not call user create given invalid credential', async () => {
       const credential = { email: null, password: '' }
-      expect(async () => { await dbLayer.register(credential) }).rejects
+      await expect(dbLayer.register(credential)).rejects.toBeInstanceOf(Error)
       expect(db.User.create).not.toBeCalled()
     })
     
-    it('should reject given invalid credential', () => {
+    it('should reject given invalid credential', async () => {
       const credential = { email: null, password: '' }
-      expect(async () => { await dbLayer.register(credential) }).rejects
+      await expect(dbLayer.register(credential)).rejects.toBeInstanceOf(Error)
     })
 
     it('should create a new account awaiting email confirmation', async () => {
       const credential = { email: "kunal.v.mandalia@gmail.com", password: 'unit-test-password' }
       db.User.create.mockReturnValueOnce({ dataValues: { email: credential.email }})
-      const result = await dbLayer.register(credential)
-      expect(result).toEqual(credential.email)
+      await expect(dbLayer.register(credential)).resolves.toEqual(credential.email)
     })
   })
 })

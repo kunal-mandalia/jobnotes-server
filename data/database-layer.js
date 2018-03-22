@@ -2,10 +2,12 @@ const bcrypt = require('bcrypt')
 const ORM = require('./model')
 const {
   isValidEmail,
-  generateRandomAlphanumericString
+  generateRandomAlphanumericString,
+  validateCredential
 } = require('../util/helper')
 const {
   AWAITING_CONFIRMATION,
+  REGISTERED,
   USER
 } = require('./constants')
 
@@ -19,15 +21,18 @@ const DatabaseLayer = (db = ORM) => {
      */
     confirmAccount: async function confirmAccount(confirmationCode) {
       try {
-        if (typeof confirmationCode !== 'string') {
+        if (!confirmationCode || typeof confirmationCode !== 'string') {
           throw 'Argument must be type string'
         }
 
-        // todo: find user based ons: sequelize findOne query structure
-        // db.User.findOne({
-
-        // })
-        return true
+        const result = await db.User.update(
+          {
+            status: REGISTERED,
+            confirmation_code: null
+          },
+          { where: { confirmation_code: confirmationCode }}
+        )
+        return result[0]
       } catch (e) {
         throw new Error(e)
       }
@@ -40,6 +45,14 @@ const DatabaseLayer = (db = ORM) => {
         throw new Error(e)
       }
     },
+    login: async function login(credential) {
+      try {
+        validateCredential(credential)
+        
+      } catch (e) {
+        throw new Error(e)
+      }
+    },
     /**
      * 
      * @param {Object} credential: {email, password}
@@ -47,15 +60,8 @@ const DatabaseLayer = (db = ORM) => {
      */
     register: async function register(credential) {
       try {
-        if (!credential || !credential.email || !credential.password) {
-          throw 'Missing args'
-        }
-        if (typeof credential.email !== 'string' || typeof credential.password !== 'string') {
-          throw 'Invalid arg type(s)'
-        }
-        if (!isValidEmail(credential.email)) {
-          throw 'Invalid email'
-        }
+        validateCredential(credential)
+
         const { email, password } = credential
         const confirmationCode = generateRandomAlphanumericString()
         const hash = await bcrypt.hash(password, 10)
