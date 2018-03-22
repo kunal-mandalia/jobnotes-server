@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 const { sequelize } = require('./connection')
 const constant = require('./constants')
 
-const User = sequelize.define('user', {
+const User = sequelize.define('users', {
   user_id: { type: Sequelize.INTEGER, unique: true, primaryKey: true, autoIncrement: true },
   email: { type: Sequelize.STRING, unique: true },
   password: Sequelize.STRING,
@@ -18,6 +18,17 @@ const User = sequelize.define('user', {
     constant.DISABLED,
     constant.REGISTERED
   )
+}, {
+  // As per https://stackoverflow.com/questions/34120548/using-bcrypt-with-sequelize-model
+  freezeTableName: true,
+  instanceMethods: {
+    generateHash(password) {
+      return bcrypt.hash(password, bcrypt.genSaltSync(8));
+    },
+    validPassword(password) {
+      return bcrypt.compare(password, this.password);
+    }
+  }
 })
 
 module.exports = {
