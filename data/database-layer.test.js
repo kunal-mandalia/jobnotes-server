@@ -4,7 +4,8 @@ let db = {
   User: {
     create: jest.fn(),
     findById: jest.fn(),
-    update: jest.fn()
+    update: jest.fn(),
+    find: jest.fn()
   }
 }
 const dbLayer = DatabaseLayer(db)
@@ -74,6 +75,22 @@ describe('database-layer', () => {
     it('should throw given invalid credentials', async () => {
       const badCredential = { email: 'kunal@ltd.co', password: null }
       await expect(dbLayer.login(badCredential)).rejects.toBeInstanceOf(Error)
+    })
+
+    it('should update last_login and return JWT given valid credentials', async () => {
+      const credential = { email: 'kunal@ltd.co', password: 'somethingStrong' }
+      const JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMywiaWF0IjoxNTIxODk2NzY2fQ.cHiB1rVlP1BoGpjjqE6Ea5mohzn1pMPy8MS1Uiy-7V0'
+      const mockFnLogin = jest.fn().mockImplementationOnce((password) => {
+        if (password === credential.password) return JWT
+        throw 'Bad credential'
+      })
+      db.User.find.mockImplementationOnce((attributes) => {
+        if (attributes.where.email === credential.email) return { login: mockFnLogin }
+        throw 'Bad credential'
+      })
+
+      const result = await dbLayer.login(credential)
+      expect(result).toEqual({ jwt: JWT })
     })
   })
 

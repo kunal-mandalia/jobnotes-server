@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const ORM = require('./model')
 const {
+  getNowISO,
   isValidEmail,
   generateRandomAlphanumericString,
   validateCredential
@@ -39,16 +40,35 @@ const DatabaseLayer = (db = ORM) => {
     },
     getUserById: async function getUserById(user_id) {
       try {
-        const result = db.User.findById(user_id)
+        const result = await db.User.findById(user_id)
         return result
       } catch (e) {
         throw new Error(e)
       }
     },
+    /**
+     * Given user provides  correct credential
+     * their last_login date will be set to now
+     * and a jwt token will be returned 
+     */
     login: async function login(credential) {
       try {
+        // validation may also be applied at the ORM object level
         validateCredential(credential)
-        
+        const { email, password } = credential
+        const user = await db.User.find({
+          where: {
+            email,
+          },
+        })
+        if (user) {
+          const token = await user.login(password)
+          return {
+            jwt: token
+          }
+        } else {
+          throw 'Bad credential'
+        }
       } catch (e) {
         throw new Error(e)
       }
