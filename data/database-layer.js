@@ -47,9 +47,11 @@ const DatabaseLayer = (db = ORM) => {
       }
     },
     /**
-     * Given user provides  correct credential
+     * Given user provides correct credential
      * their last_login date will be set to now
-     * and a jwt token will be returned 
+     * and a jwt token will be returned
+     * @param {Object}
+     * @return {Object} Token: { jwt: String }
      */
     login: async function login(credential) {
       try {
