@@ -1,4 +1,5 @@
 const db = require('./database-layer').databaseLayer
+const { requireAuth } = require('../util/helper')
 
 const Resolver = databaseLayer => {
   /**
@@ -9,24 +10,20 @@ const Resolver = databaseLayer => {
    */
   return {
     confirmAccount: async ({confirmationCode}) => {
-      const result = await databaseLayer.confirmAccount(confirmationCode)
-      return result
+      return await databaseLayer.confirmAccount(confirmationCode)
+    },
+    createOpportunity: async ({opportunityInput}, context) => {
+      requireAuth(context)
     },
     getMyProfile: async (_, context) => {
-      const user_id = context.headers.authorization
-      if (user_id) {
-        const result = await db.getUserById(31)
-        return result
-      }
-      throw new Error('You need to login first')
+      requireAuth(context)
+      return await db.getUserById(user_id)
     },
     login: async ({credential}) => {
-      const result = await databaseLayer.login(credential)
-      return result
+      return await databaseLayer.login(credential)
     },
     register: async ({credential}) => {
-      const result = await databaseLayer.register(credential)
-      return result
+      return await databaseLayer.register(credential)
     },
   }
 }
