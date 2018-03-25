@@ -13,4 +13,11 @@ describe('helper functions', () => {
       expect(() => { helper.validateCredential(credential) }).not.toThrow()
     })
   })
+
+  describe('requireAuth()', () => {
+    it('should throw if no user object on context', () => {
+      const context = {}
+      expect(() => { helper.requireAuth(context) }).toThrow()
+    })
+  })
 })

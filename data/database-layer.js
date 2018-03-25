@@ -38,6 +38,13 @@ const DatabaseLayer = (db = ORM) => {
         throw new Error(e)
       }
     },
+    /**
+     * Create a new opportunity for current user
+     * @param {Object} Opportunity
+     */
+    createOpportunity: async function createOpportunity(user_id, opportunity) {
+      throw new Error('Create Opportunity not implemented')
+    },
     getUserById: async function getUserById(user_id) {
       try {
         const result = await db.User.findById(user_id)

@@ -19,6 +19,14 @@ describe('resolver', () => {
     })
   })
 
+  describe('createOpportunity()', () => {
+    const createOpportunityInput = {}
+    const context = {}    
+    it('should throw if user not authenticated', async () => {
+      await expect(resolver.createOpportunity({ createOpportunityInput }, context)).rejects.toBeInstanceOf(Error)
+    })
+  })
+
   describe('login()', () => {
     it('should call db layer login with credential', async () => {
       const credential = { email: 'kvm@ltd.co', password: 'hash' }
