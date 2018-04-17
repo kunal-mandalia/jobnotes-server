@@ -52,6 +52,7 @@ const Schema = (buildSchemaGQL = buildSchema) => buildSchemaGQL(`
   }
 
   input OpportunityInput {
+    id: ID
     company: String
     address: String
     money: Int
@@ -66,6 +67,7 @@ const Schema = (buildSchemaGQL = buildSchema) => buildSchemaGQL(`
   }
 
   input RecruiterInput {
+    id: ID
     name: String
     telephone: String
   }
@@ -76,7 +78,7 @@ const Schema = (buildSchemaGQL = buildSchema) => buildSchemaGQL(`
   }
 
   input NoteInput {
-    id: ID!
+    id: ID
     comments: String!
   }
 
