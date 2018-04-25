@@ -14,9 +14,12 @@ const Resolver = databaseLayer => {
     },
     createOpportunity: async ({opportunityInput}, context) => {
       requireAuth(context)
+      const { user_id } = context.user
+      return await databaseLayer.createOpportunity(user_id, opportunityInput)
     },
     getMyProfile: async (_, context) => {
       requireAuth(context)
+      const { user_id } = context.user
       return await db.getUserById(user_id)
     },
     login: async ({credential}) => {

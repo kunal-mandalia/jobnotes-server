@@ -31,7 +31,7 @@ const validateCredential = credential => {
  * @param {Object} context 
  */
 const requireAuth = (context) => {
-  if (!context || !context.user || !context.user.user_id || typeof context.user.user_id !== 'string' ) {
+  if (!context || !context.user || !context.user.user_id ) {
     throw new Error('Try logging in first')
   }
 }

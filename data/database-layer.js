@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt')
-const ORM = require('./model')
+const ORM = require('./models/index')
 const {
   getNowISO,
   isValidEmail,

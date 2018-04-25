@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const { sequelize } = require('./connection')
-const constant = require('./constants')
-const { getNowISO } = require('../util/helper')
+const { sequelize } = require('../connection')
+const constant = require('../constants')
+const { getNowISO } = require('../../util/helper')
 
 const User = sequelize.define('users', {
   user_id: { type: Sequelize.INTEGER, unique: true, primaryKey: true, autoIncrement: true },
