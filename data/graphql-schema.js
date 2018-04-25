@@ -39,7 +39,7 @@ const Schema = (buildSchemaGQL = buildSchema) => buildSchemaGQL(`
 
   enum Role {
     ADMIN
-    CONSUMER
+    USER
   }
 
   type Opportunity {
